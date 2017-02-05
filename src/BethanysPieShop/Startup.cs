@@ -25,7 +25,7 @@ namespace BethanysPieShop
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
-            app.UseMvcWithDefaultRoute();
+            app.UseMvcWithDefaultRoute(); 
         }
     }
 }
