@@ -2,7 +2,7 @@
 
 namespace BethanysPieShop.Models
 {
-    interface ICategoryRepository
+    public interface ICategoryRepository
     {
         IEnumerable<Category> Categories { get; }
     }
