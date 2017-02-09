@@ -31,8 +31,8 @@ namespace BethanysPieShop
 
             // What AddTransient means is that whenever we invoke an ICategoryRepository we'll get
             // back a new MockCategoryRepository.
-            services.AddTransient<ICategoryRepository, MockCategoryRepository>();
-            services.AddTransient<IPieRepository, MockPieRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<IPieRepository, PieRepository>();
             services.AddMvc();
         }
 
