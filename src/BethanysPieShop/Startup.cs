@@ -43,6 +43,8 @@ namespace BethanysPieShop
             app.UseStatusCodePages();
             app.UseStaticFiles();
             app.UseMvcWithDefaultRoute();
+
+            DbInitializer.Seed(app);
         }
     }
 }
