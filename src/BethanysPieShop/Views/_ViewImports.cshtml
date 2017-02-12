@@ -1,2 +1,11 @@
-﻿@using BethanysPieShop.Models
+﻿@* 
+    Lists out the namespaces, regular and ones where custom
+    tag helpers reside, that will be used in our views.
+    Note that custom tag helper namespaces must also have their
+    associated assemblies listed beside them.
+*@
+
+@using BethanysPieShop.Models
 @using BethanysPieShop.ViewModels
+
+@addTagHelper BethanysPieShop.TagHelpers.*, BethanysPieShop
