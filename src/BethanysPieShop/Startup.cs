@@ -1,6 +1,7 @@
 ﻿using BethanysPieShop.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -33,7 +34,16 @@ namespace BethanysPieShop
             // back a new MockCategoryRepository.
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IPieRepository, PieRepository>();
+            services.AddSingleton<IHttpContextAccessor, HttpContextAccessor>();
+            // The AddScoped method will create an object associated with the request.
+            // It is, however, different for each request. Person A will get an instance
+            // of a shopping cart but Person B will get another instance of a different shopping cart. 
+            services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
             services.AddMvc();
+
+
+            services.AddMemoryCache();
+            services.AddSession();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -42,6 +52,9 @@ namespace BethanysPieShop
             app.UseDeveloperExceptionPage();
             app.UseStatusCodePages();
             app.UseStaticFiles();
+            // The placement of the UseSession middleware here before UseMvc is important, otherwise
+            // it wouldn't work. 
+            app.UseSession();
             app.UseMvcWithDefaultRoute();
 
             DbInitializer.Seed(app);
