@@ -55,7 +55,21 @@ namespace BethanysPieShop
             // The placement of the UseSession middleware here before UseMvc is important, otherwise
             // it wouldn't work. 
             app.UseSession();
-            app.UseMvcWithDefaultRoute();
+
+            //app.UseMvcWithDefaultRoute();
+            app.UseMvc(routes =>
+            {
+                // The placement of routes is important. The most specific must go towards the top
+                // while the most general fall to the very bottom.
+                routes.MapRoute(
+                    name: "categoryFilter",
+                    template: "Pie/{action}/{category?}",
+                    defaults: new { Controller = "Pie", action = "List" });
+
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller=Home}/{action=Index}/{id?}");
+            });
 
             DbInitializer.Seed(app);
         }

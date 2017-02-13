@@ -21,13 +21,34 @@ namespace BethanysPieShop.Controllers
             _pieRepository = pieRepository;
         }
 
-        public ViewResult List()
+        public ViewResult List(string category)
         {
-            var piesListViewModel = new PiesListViewModel();
-            piesListViewModel.Pies = _pieRepository.Pies;
-            piesListViewModel.CurrentCategory = "Cheese cakes";
+            IEnumerable<Pie> pies;
+            string currentCategory = string.Empty;
 
-            return View(piesListViewModel);
+            // If no category is specified, return all pies.
+            if (string.IsNullOrEmpty(category))
+            {
+                pies = _pieRepository.Pies.OrderBy(p => p.PieId);
+                currentCategory = "All pies";
+            }
+            else
+            {
+                // If a category is passed in then filter by that category.
+                pies = _pieRepository.Pies
+                                     .Where(p => p.Category.CategoryName == category)
+                                     .OrderBy(p => p.PieId);
+
+                currentCategory = _categoryRepository.Categories
+                                                     .FirstOrDefault(c => c.CategoryName == category)
+                                                     .CategoryName;
+            }
+
+            return View(new PiesListViewModel
+            {
+                Pies = pies,
+                CurrentCategory = currentCategory
+            });
         }
     }
 }
