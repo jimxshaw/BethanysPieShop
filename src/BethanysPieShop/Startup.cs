@@ -39,8 +39,9 @@ namespace BethanysPieShop
             // It is, however, different for each request. Person A will get an instance
             // of a shopping cart but Person B will get another instance of a different shopping cart. 
             services.AddScoped<ShoppingCart>(sp => ShoppingCart.GetCart(sp));
-            services.AddMvc();
+            services.AddTransient<IOrderRepository, OrderRepository>();
 
+            services.AddMvc();
 
             services.AddMemoryCache();
             services.AddSession();
