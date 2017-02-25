@@ -23,6 +23,9 @@ namespace BethanysPieShop.Controllers
 
         public ViewResult List(string category)
         {
+
+            //throw new Exception("Error");
+
             IEnumerable<Pie> pies;
             string currentCategory = string.Empty;
 

@@ -54,8 +54,20 @@ namespace BethanysPieShop
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
-            app.UseDeveloperExceptionPage();
-            app.UseStatusCodePages();
+
+            // Check the present environment and depending on what it is we'll then show the
+            // appropriate exceptions page. The environment variable can be found in the
+            // project's Properties page under Debug.
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+                app.UseStatusCodePages();
+            }
+            else
+            {
+                app.UseExceptionHandler("/AppException");
+            }
+
             app.UseStaticFiles();
             // The placement of the UseSession middleware here before UseMvc is important, otherwise
             // it wouldn't work. 
