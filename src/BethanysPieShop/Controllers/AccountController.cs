@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using BethanysPieShop.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Mvc;
@@ -11,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace BethanysPieShop.Controllers
 {
+    [Authorize]
     public class AccountController : Controller
     {
         private readonly UserManager<IdentityUser> _userManager;
@@ -22,6 +24,10 @@ namespace BethanysPieShop.Controllers
             _signInManager = signInManager;
         }
 
+        // With the Authorize attribute atop the AccountController, how then can non-logged in users ever
+        // reach the Login or Register actions? The AllowAnonymous attribute must be added to those 
+        // actions to allow non-logged in users.
+        [AllowAnonymous]
         public IActionResult Login(string returnUrl)
         {
             return View(new LoginViewModel
@@ -31,6 +37,7 @@ namespace BethanysPieShop.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
         public async Task<IActionResult> Login(LoginViewModel loginViewModel)
         {
             // If the model is invalid then we return to the same view.
@@ -65,7 +72,7 @@ namespace BethanysPieShop.Controllers
             return View(loginViewModel);
         }
 
-
+        [AllowAnonymous]
         public IActionResult Register()
         {
             return View();
@@ -73,6 +80,7 @@ namespace BethanysPieShop.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
+        [AllowAnonymous]
         public async Task<IActionResult> Register(LoginViewModel loginViewModel)
         {
             if (ModelState.IsValid)
