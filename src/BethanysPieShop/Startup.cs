@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -30,6 +31,9 @@ namespace BethanysPieShop
                     options => options.UseSqlServer(_configurationRoot.GetConnectionString("DefaultConnection"))
                 );
 
+            services.AddIdentity<IdentityUser, IdentityRole>()
+                    .AddEntityFrameworkStores<AppDbContext>();
+
             // What AddTransient means is that whenever we invoke an ICategoryRepository we'll get
             // back a new MockCategoryRepository.
             services.AddTransient<ICategoryRepository, CategoryRepository>();
@@ -56,6 +60,7 @@ namespace BethanysPieShop
             // The placement of the UseSession middleware here before UseMvc is important, otherwise
             // it wouldn't work. 
             app.UseSession();
+            app.UseIdentity();
 
             //app.UseMvcWithDefaultRoute();
             app.UseMvc(routes =>
